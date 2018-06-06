@@ -16,3 +16,28 @@ class Query(graphene.ObjectType):
     # the resolver function returns all the Links that have been created and stored
     def resolve_links(self, info, **kwargs):
         return Link.objects.all()
+
+# this creates the mutation named 'CreateLink' that will allow you to add new Links to the database
+class CreateLink(graphene.Mutation):
+    id = graphene.Int()
+    url = graphene.String()
+    description = graphene.String()
+
+    class Arguments:
+        url = graphene.String()
+        description = graphene.String()
+
+    # this actually creates the link on the database
+    def mutate(self, info, url, description):
+        link = Link(url=url, description=description)
+        link.save()
+
+        return CreateLink(
+            id=link.id,
+            url=link.url,
+            description=link.description
+        )
+
+# this is the actual mutation class, the Query class. It calls the CreateLink class to create a new Link
+class Mutation(graphene.ObjectType):
+    create_link = CreateLink.Field()
