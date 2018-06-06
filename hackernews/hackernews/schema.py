@@ -4,7 +4,7 @@ import links.schema
 import users.schema
 
 # this Query automatically inherits the Query defined in links.schema
-class Query(links.schema.Query, graphene.ObjectType):
+class Query(users.schema.Query, links.schema.Query, graphene.ObjectType):
     pass
 
 # this Mutation works just like the Query in that it automatically inherits the Mutation from links.schema
